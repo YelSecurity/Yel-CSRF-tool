@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "Yel CSRF tool",
+    "version": "0.1.0",
+    "description": "CSRF tool designed by Mikhail Salnikov from Yel Security",
+    "author": "Mikhail Salnikov",
+    "devtools_page": "devtools.html",
+    "background": {
+      "scripts": ["background.js"],
+      "presistent": false
+    },
+    "permissions": [
+      "tabs",
+      "<all_urls>"
+    ]
+}

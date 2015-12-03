@@ -1,0 +1,95 @@
+body {
+  font-family: tahoma, arial, verdana, sans-serif, Lucida Sans;
+  font-size: 12px;
+	margin: 0 0 0 0;
+}
+.row {
+  width: 100%;
+  min-width: 700px;
+  margin: 0 auto;
+  /*overflow: hidden;*/
+}
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.row .left {
+  float: left;
+  min-height: 1px;
+  padding-right: 10px;
+  width: 35%;
+  box-sizing: border-box;
+}
+.row .right {
+  float: left;
+  min-height: 1px;
+  padding-right: 10px;
+  width: 64.99999%;
+  box-sizing: border-box;
+}
+
+.requests_list {
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 1px solid #8f8f8f;
+	background: rgba(0, 0, 0, .03);
+	overflow-y: auto;
+}
+
+.requests_list .request {
+  padding-bottom: 4px;
+	padding-top: 4px;
+	padding-left: 15px;
+	padding-right: 15px;
+  color: rgba(0, 0, 0, 0.80);
+	white-space: nowrap;
+	overflow: hidden;
+}
+.requests_list .request._v2 {
+	background-color: rgba(50, 0, 0, 0.05);
+}
+.requests_list .request:hover {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 1);
+	background: rgba(0, 0, 155, 0.05);
+}
+
+.options {
+  padding: 5px 10px 3px 15px;
+}
+
+.options input.fname {
+  width: 30%;
+  margin: 2px;
+  margin-right: 5px;
+}
+
+.options input.fvalue {
+  width: 60%;
+  margin: 2px;
+}
+
+.options.manipulators {
+  margin: 5px;
+}
+
+.btn {
+  display: inline-block;
+  border: none;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 5px;
+  margin-left: 5px;
+  background: none;
+  font: black;
+}
