@@ -225,6 +225,9 @@ a {
   margin-top: 2rem;
   border-top: solid 1px #eff0f1; }
 
+.site-footer img.logo {
+  }
+
 .site-footer-owner {
   display: block;
   font-weight: bold; }
