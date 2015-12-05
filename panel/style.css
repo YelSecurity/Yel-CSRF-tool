@@ -93,3 +93,7 @@ body {
   background: none;
   font: black;
 }
+
+.btn.encodeDecodeURI {
+  margin-bottom: 15px;
+}

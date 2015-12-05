@@ -35,11 +35,11 @@ $(function() {
     var $formParams = $("<div class='form_params'></div>");
     current_request.request.postData.params.forEach(function(item, i, arr) {
       var $input = $("<input class='fname'></input>");
-      $input.prop({ 'value': item.name, "id": i });
+      $input.prop({ 'value': decodeURIComponent(item.name), "id": i });
       $formParams.append($input);
 
       var $input = $("<input class='fvalue'></input>");
-      $input.prop({ 'value': item.value, "id": i });
+      $input.prop({ 'value': decodeURIComponent(item.value), "id": i });
       $formParams.append($input);
 
       $formParams.append("<a href='#remove' class='remove_input' id="+i+">x</a>");
@@ -47,10 +47,26 @@ $(function() {
     $form.append($formParams);
     var $myDiv = $("<div class='manipulators'></div>");
     $myDiv.append($("<a hover='#add_field' class='add_field btn'>Add field</a>"));
-    $myDiv.append($("<button class='send btn'>Send</button>"));
+    $myDiv.append($("<input type='submit' class='send btn' value='Submit'>"));
     $form.append($myDiv);
 
+    $(".options").append("<a hover='#decodeURI' class='btn encodeDecodeURI' id='decodeURI'>decodeURI</a>");
+    $(".options").append("<a hover='#encodeURI' class='btn encodeDecodeURI' id='encodeURI'>encodeURI</a>");
     $(".options").append($form);
+  });
+
+  $(".options").on("click", "a#decodeURI", function(e) {
+    e.preventDefault();
+    $(".options").find(".form_params").find("input").each(function() {
+      $(this).val(decodeURIComponent($(this).val()));
+    });
+  });
+
+  $(".options").on("click", "a#encodeURI", function(e) {
+    e.preventDefault();
+    $(".options").find(".form_params").find("input").each(function() {
+      $(this).val(encodeURIComponent($(this).val()));
+    });
   });
 
   $(".options").on("click", "a.remove_input", function(e) {
@@ -78,9 +94,13 @@ $(function() {
 
   $(".options").on("submit", "form", function(e) {
     e.preventDefault();
-    newTabPort = chrome.runtime.connect({ name: "new tab" });
+    var newTabPort = chrome.runtime.connect({ name: "new tab" }),
+        params = [];
+    $.each($(".options").find("form").find("input"), function(i, val) {
+      params.push($(val).val());
+    });
     newTabPort.postMessage({
-      params: $(this).serializeArray(),
+      params: params,
       request: allRequests[parseInt($(this).prop("id"))].request
     });
   });
