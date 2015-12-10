@@ -11,4 +11,5 @@ $(function() {
     alsoResizeReverse: ".right",
     handles: 'e, w'
   });
+
 });

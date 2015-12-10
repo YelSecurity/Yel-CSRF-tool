@@ -1,1 +1,1 @@
-chrome.devtools.panels.create("YelSec CSRF tool", null, 'panel/panel.html', null);
+chrome.devtools.panels.create("Yel CSRF tool", null, 'panel/panel.html', null);

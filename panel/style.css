@@ -7,7 +7,7 @@ body {
   width: 100%;
   min-width: 700px;
   margin: 0 auto;
-  /*overflow: hidden;*/
+  overflow: hidden;
 }
 .row:after {
 	content: "";
@@ -20,7 +20,6 @@ body {
 .row .left {
   float: left;
   min-height: 1px;
-  padding-right: 10px;
   width: 35%;
   box-sizing: border-box;
 }
@@ -33,7 +32,6 @@ body {
 }
 
 .requests_list {
-  white-space: nowrap;
   overflow: hidden;
   border-right: 1px solid #8f8f8f;
 	background: rgba(0, 0, 0, .03);
@@ -44,10 +42,11 @@ body {
   padding-bottom: 4px;
 	padding-top: 4px;
 	padding-left: 15px;
-	padding-right: 15px;
   color: rgba(0, 0, 0, 0.80);
-	white-space: nowrap;
-	overflow: hidden;
+  height: 33px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
 }
 .requests_list .request._v2 {
 	background-color: rgba(50, 0, 0, 0.05);
@@ -56,6 +55,19 @@ body {
   cursor: pointer;
   color: rgba(0, 0, 0, 1);
 	background: rgba(0, 0, 155, 0.05);
+}
+
+.requests_list .request .head {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.requests_list .request .head .clear {
+  float: right;
+  padding-right: 3px;
+}
+
+.requests_list .request .head .clear a {
+  text-decoration: none;
 }
 
 .options {
@@ -77,21 +89,31 @@ body {
   margin: 5px;
 }
 
+.requests_list .control_panel {
+  background-color: white;
+  border-bottom: 1px solid #8f8f8f;
+}
+
 .btn {
   display: inline-block;
   border: none;
-  padding: 6px 12px;
+  padding: 4px 7px;
   margin-bottom: 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: normal;
   text-align: center;
   cursor: pointer;
   border: 1px solid #ccc;
-  border-radius: 4px;
   margin-right: 5px;
   margin-left: 5px;
   background: none;
-  font: black;
+  color: #333;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background-color: #f0f0f0;
+  color: black;
 }
 
 .btn.encodeDecodeURI {

@@ -15,8 +15,8 @@ $(function() {
       } else {
         bool = true;
       }
+      $div.append("<div class='head'><span>"+request.request.url.split('/')[2]+"</span> <span class='clear'><a href='#clear_request' class='.clear'>x</a></span></div>");
       $div.append("<div>"+request.request.url+"</div>");
-      $div.append("<div style='color: rgba(0, 0, 0, 0.45);'>"+request.request.url.split('/')[2]+"</div>");
 
       $(".requests_list").append($div);
 
@@ -103,6 +103,18 @@ $(function() {
       params: params,
       request: allRequests[parseInt($(this).prop("id"))].request
     });
+  });
+
+  $(".control_panel").on("click", "a#clear_all_requests", function(e) {
+    e.preventDefault();
+    $(".requests_list").find(".request").remove();
+    allRequests = [];
+  });
+
+  $(".requests_list").on("click", ".head span.clear a", function(e) {
+    e.preventDefault();
+    $(this).parent().parent().parent().remove();
+    $(".options").text(" ");
   });
 
 });
