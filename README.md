@@ -1,4 +1,4 @@
-# Yel-CSRF-tool
+# Yel CSRF tool
 A simple solution for penetration testing.
 
 [Official page](http://yelgroup.github.io/Yel-CSRF-tool/)
