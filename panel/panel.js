@@ -1,24 +1,20 @@
-var allRequests = [];
-var bool = false;
+var allRequests = [],
+    availableTypesOfRequests = ["POST"];
 
 $(function() {
 
   var requestPort = chrome.runtime.connect({ name: "request" });
   chrome.devtools.network.onRequestFinished.addListener(function(request) {
-    if (request.request.method === "POST") {
+    if (availableTypesOfRequests.includes(request.request.method)) {
       requestPort.postMessage(request);
 
       var $div = $("<div class='request' id="+allRequests.length+"></div>");
-      if (bool) {
-        $div.addClass("_v2");
-        bool = false;
-      } else {
-        bool = true;
-      }
-      $div.append("<div class='head'><span>"+request.request.url.split('/')[2]+"</span> <span class='clear'><a href='#clear_request' class='.clear'>x</a></span></div>");
+
+      $div.append("<div class='head'><span class='head_request_method'>"+request.request.method+"</span><span>"+request.request.url.split('/')[2]+"</span> <span class='clear'><a href='#clear_request' class='.clear'>x</a></span></div>");
       $div.append("<div>"+request.request.url+"</div>");
 
       $(".requests_list").append($div);
+      $(".request").filter(":even").addClass("_v2");
 
       allRequests.push(request);
     }
@@ -115,6 +111,22 @@ $(function() {
     e.preventDefault();
     $(this).parent().parent().parent().remove();
     $(".options").text(" ");
+  });
+
+  $(".availableTypeOfRequestIsPOST").change(function() {
+    if ($(this).is(':checked')) {
+      availableTypesOfRequests.push("POST");
+    } else {
+      availableTypesOfRequests.splice(availableTypesOfRequests.indexOf("POST"), 1);
+    }
+  });
+
+  $(".availableTypeOfRequestIsGET").change(function() {
+    if ($(this).is(':checked')) {
+      availableTypesOfRequests.push("GET");
+    } else {
+      availableTypesOfRequests.splice(availableTypesOfRequests.indexOf("GET"), 1);
+    }
   });
 
 });
