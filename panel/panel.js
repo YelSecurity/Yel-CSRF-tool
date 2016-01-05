@@ -2,7 +2,7 @@ var allRequests = [],
     availableTypesOfRequests = ["POST"];
 
 $(function() {
-
+/////////////////////////////MAIN///////////////////////////////////////////////
   var requestPort = chrome.runtime.connect({ name: "request" });
   chrome.devtools.network.onRequestFinished.addListener(function(request) {
     if (availableTypesOfRequests.includes(request.request.method)) {
@@ -28,28 +28,57 @@ $(function() {
         $form = $("<form></form>");
     $form.prop("id", $(this).prop("id"));
 
-    var $formParams = $("<div class='form_params'></div>");
-    current_request.request.postData.params.forEach(function(item, i, arr) {
-      var $input = $("<input class='fname'></input>");
-      $input.prop({ 'value': decodeURIComponent(item.name), "id": i });
-      $formParams.append($input);
+    var selectedQuery = chrome.runtime.connect({ name: "selected query" });
+    selectedQuery.postMessage(current_request);
 
-      var $input = $("<input class='fvalue'></input>");
-      $input.prop({ 'value': decodeURIComponent(item.value), "id": i });
-      $formParams.append($input);
+    switch (current_request.request.method.toString()) {
+      case "GET":
+        $(".options").append("<center><h1>GET - comming soon</h1>"+JSON.stringify(current_request.request)+"</center>");
+        break;
+      case "POST":
+//------------------------------POST------------------------------------------//
+        var $formParams = $("<div class='form_params'></div>");
+        current_request.request.postData.params.forEach(function(item, i, arr) {
+          var $input = $("<input class='fname'></input>");
+          $input.prop({ 'value': decodeURIComponent(item.name), "id": i });
+          $formParams.append($input);
 
-      $formParams.append("<a href='#remove' class='remove_input' id="+i+">x</a>");
-    });
-    $form.append($formParams);
-    var $myDiv = $("<div class='manipulators'></div>");
-    $myDiv.append($("<a hover='#add_field' class='add_field btn'>Add field</a>"));
-    $myDiv.append($("<input type='submit' class='send btn' value='Submit'>"));
-    $form.append($myDiv);
+          var $input = $("<input class='fvalue'></input>");
+          $input.prop({ 'value': decodeURIComponent(item.value), "id": i });
+          $formParams.append($input);
 
-    $(".options").append("<a hover='#decodeURI' class='btn encodeDecodeURI' id='decodeURI'>decodeURI</a>");
-    $(".options").append("<a hover='#encodeURI' class='btn encodeDecodeURI' id='encodeURI'>encodeURI</a>");
-    $(".options").append($form);
+          $formParams.append("<a href='#remove' class='remove_input' id="+i+">x</a>");
+        });
+        $form.append($formParams);
+        var $myDiv = $("<div class='manipulators'></div>");
+        $myDiv.append($("<a hover='#add_field' class='add_field btn'>Add field</a>"));
+        $myDiv.append($("<input type='submit' class='send btn' value='Submit'>"));
+        $form.append($myDiv);
+
+        $(".options").append("<a hover='#decodeURI' class='btn encodeDecodeURI' id='decodeURI'>decodeURI</a>");
+        $(".options").append("<a hover='#encodeURI' class='btn encodeDecodeURI' id='encodeURI'>encodeURI</a>");
+        $(".options").append($form);
+//-----------------------------------END-POST---------------------------------//
+        break;
+      default:
+        $(".options").append("<center><h1>This request type not supported</h1>"+JSON.stringify(current_request.request)+"</center>");
+    }
   });
+
+  $(".options").on("submit", "form", function(e) {
+    e.preventDefault();
+    var newTabPort = chrome.runtime.connect({ name: "new tab" }),
+        params = [];
+    $.each($(".options").find("form").find("input"), function(i, val) {
+      params.push($(val).val());
+    });
+    newTabPort.postMessage({
+      params: params,
+      request: allRequests[parseInt($(this).prop("id"))].request
+    });
+  });
+
+////////////////////////////////////////////////////////////////////////////////
 
   $(".options").on("click", "a#decodeURI", function(e) {
     e.preventDefault();
@@ -86,19 +115,6 @@ $(function() {
     $input.prop({ "id": newId });
     $formParams.append($input);
     $formParams.append("<a href='#remove' class='remove_input' id="+newId+">x</a>");
-  });
-
-  $(".options").on("submit", "form", function(e) {
-    e.preventDefault();
-    var newTabPort = chrome.runtime.connect({ name: "new tab" }),
-        params = [];
-    $.each($(".options").find("form").find("input"), function(i, val) {
-      params.push($(val).val());
-    });
-    newTabPort.postMessage({
-      params: params,
-      request: allRequests[parseInt($(this).prop("id"))].request
-    });
   });
 
   $(".control_panel").on("click", "a#clear_all_requests", function(e) {
