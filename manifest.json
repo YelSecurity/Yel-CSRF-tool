@@ -12,5 +12,6 @@
     "permissions": [
       "tabs",
       "<all_urls>"
-    ]
+    ],
+    "icons": {"48": "icon48.png"}
 }
