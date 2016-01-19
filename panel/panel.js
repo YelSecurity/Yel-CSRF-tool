@@ -1,6 +1,20 @@
 var allRequests = [],
     availableTypesOfRequests = ["POST"];
 
+function extractDomain(url) {
+    var domain;
+    //find & remove protocol (http, ftp, etc.) and get domain
+    if (url.indexOf("://") > -1) {
+        domain = url.split('/')[2];
+    }
+    else {
+        domain = url.split('/')[0];
+    }
+    //find & remove port number
+    domain = domain.split(':')[0];
+    return domain;
+}
+
 $(function() {
 /////////////////////////////MAIN///////////////////////////////////////////////
   var requestPort = chrome.runtime.connect({ name: "request" });
@@ -31,32 +45,49 @@ $(function() {
     var selectedQuery = chrome.runtime.connect({ name: "selected query" });
     selectedQuery.postMessage(current_request);
 
+    var $formParams = $("<div class='form_params'></div>");
+    $(".options").append("<a hover='#decodeURI' class='btn encodeDecodeURI' id='decodeURI'>decodeURI</a>");
+    $(".options").append("<a hover='#encodeURI' class='btn encodeDecodeURI' id='encodeURI'>encodeURI</a>");
+
+    function form_filling(myArray) {
+      myArray.forEach(function(item, i, arr) {
+        var $input = $("<input class='fname'></input>");
+        $input.prop({ 'value': decodeURIComponent(item.name), "id": i });
+        $formParams.append($input);
+
+        var $input = $("<input class='fvalue'></input>");
+        $input.prop({ 'value': decodeURIComponent(item.value), "id": i });
+        $formParams.append($input);
+
+        $formParams.append("<a href='#remove' class='remove_input' id="+i+">x</a>");
+      });
+      $form.append($formParams);
+      var $myDiv = $("<div class='manipulators'></div>");
+      $myDiv.append($("<a hover='#add_field' class='add_field btn'>Add field</a>"));
+      $myDiv.append($("<input type='submit' class='send btn' value='Submit'>"));
+      $form.append($myDiv);
+    }
+
     switch (current_request.request.method.toString()) {
       case "GET":
-        $(".options").append("<center><h1>GET - comming soon</h1>"+JSON.stringify(current_request.request)+"</center>");
+//-----------------------------GET--------------------------------------------//
+        $formParams.append("URL: <input class='url fvalue' value="+current_request.request.url.split("://")[0]+"://"+extractDomain(current_request.request.url)+"></input><br>");
+        if (current_request.request.queryString) {
+          form_filling(current_request.request.queryString);
+        } else {
+          $(".options").append("<h2>There are no params</h2>");
+        }
+        $(".options").append($form);
+//----------------------------END-GET-----------------------------------------//
         break;
       case "POST":
 //------------------------------POST------------------------------------------//
-        var $formParams = $("<div class='form_params'></div>");
-        current_request.request.postData.params.forEach(function(item, i, arr) {
-          var $input = $("<input class='fname'></input>");
-          $input.prop({ 'value': decodeURIComponent(item.name), "id": i });
-          $formParams.append($input);
-
-          var $input = $("<input class='fvalue'></input>");
-          $input.prop({ 'value': decodeURIComponent(item.value), "id": i });
-          $formParams.append($input);
-
-          $formParams.append("<a href='#remove' class='remove_input' id="+i+">x</a>");
-        });
-        $form.append($formParams);
-        var $myDiv = $("<div class='manipulators'></div>");
-        $myDiv.append($("<a hover='#add_field' class='add_field btn'>Add field</a>"));
-        $myDiv.append($("<input type='submit' class='send btn' value='Submit'>"));
-        $form.append($myDiv);
-
-        $(".options").append("<a hover='#decodeURI' class='btn encodeDecodeURI' id='decodeURI'>decodeURI</a>");
-        $(".options").append("<a hover='#encodeURI' class='btn encodeDecodeURI' id='encodeURI'>encodeURI</a>");
+        $formParams.append("URL: <input class='url fvalue' value="+current_request.request.url+"></input><br>");
+        if (current_request.request.postData.params) {
+          form_filling(current_request.request.postData.params);
+        } else {
+          $(".options").append("<h2>There are no params</h2>");
+        }
         $(".options").append($form);
 //-----------------------------------END-POST---------------------------------//
         break;
@@ -68,13 +99,17 @@ $(function() {
   $(".options").on("submit", "form", function(e) {
     e.preventDefault();
     var newTabPort = chrome.runtime.connect({ name: "new tab" }),
+        new_url,
         params = [];
     $.each($(".options").find("form").find("input"), function(i, val) {
       params.push($(val).val());
     });
+    new_url = params[0];
+    params.shift();
     newTabPort.postMessage({
       params: params,
-      request: allRequests[parseInt($(this).prop("id"))].request
+      request: allRequests[parseInt($(this).prop("id"))].request,
+      new_url: new_url
     });
   });
 
