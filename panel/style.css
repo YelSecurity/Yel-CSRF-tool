@@ -119,3 +119,8 @@ body {
 .btn.encodeDecodeURI {
   margin-bottom: 15px;
 }
+
+.head_request_method {
+  font-weight: bold;
+  padding-right: 5px;
+}

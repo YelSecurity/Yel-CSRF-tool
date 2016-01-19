@@ -5,7 +5,7 @@
     var requestData;
 
     port.onMessage.addListener(function(message) {
-      if (port.name == "new tab") {
+      if (port.name == "new tab" || port.name == "selected query") {
         requestData = message;
         console.log(message);
       }
