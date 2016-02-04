@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Yel CSRF tool",
     "version": "0.1.0",
-    "description": "CSRF tool designed by Yel Group and open source community",
+    "description": "CSRF tool designed by Yel Security and open source community",
     "author": "Mikhail Salnikov",
     "devtools_page": "devtools.html",
     "background": {
