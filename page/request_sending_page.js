@@ -14,7 +14,7 @@ $(function() {
     if (request.request.method === "GET") {
       var $link = $("<a>link</a>");
       $("body").append($link);
-      $link.attr("href", request.new_url + "/?");
+      $link.attr("href", request.new_url + "?");
       for (var i = 1; i < request.params.length; i += 2) {
         $link.attr("href", $link.attr("href") + request.params[i-1] + "=" + request.params[i] + "&");
       }
