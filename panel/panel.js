@@ -1,20 +1,6 @@
 var allRequests = [],
     availableTypesOfRequests = ["POST"];
 
-function extractDomain(url) {
-    var domain;
-    //find & remove protocol (http, ftp, etc.) and get domain
-    if (url.indexOf("://") > -1) {
-        domain = url.split('/')[2];
-    }
-    else {
-        domain = url.split('/')[0];
-    }
-    //find & remove port number
-    domain = domain.split(':')[0];
-    return domain;
-}
-
 $(function() {
 /////////////////////////////MAIN///////////////////////////////////////////////
   var requestPort = chrome.runtime.connect({ name: "request" });
@@ -71,7 +57,7 @@ $(function() {
     switch (current_request.request.method.toString()) {
       case "GET":
 //-----------------------------GET--------------------------------------------//
-        $formParams.append("URL: <input class='url fvalue' value="+current_request.request.url.split("://")[0]+"://"+extractDomain(current_request.request.url)+"></input><br>");
+        $formParams.append("URL: <input class='url fvalue' value="+current_request.request.url.split("?")[0]+"></input><br>");
         if (current_request.request.queryString) {
           form_filling(current_request.request.queryString);
         } else {
