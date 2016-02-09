@@ -5,4 +5,4 @@ A simple solution for penetration testing.
 
 This is Chrome extension for detecting CSRF vulnerabilities.
 
-POST and GET request supported.
+POST and GET request are supported.
