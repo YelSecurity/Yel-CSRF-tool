@@ -166,4 +166,36 @@ $(function() {
     }
   });
 
+  // DOM BASED SIMPLE TEST
+  function getjs() {
+    var strs = "";
+    for (var prop in window) {
+      if (window[prop] != null)
+        strs += toString(window[prop]);
+      // if ((window[prop] != null) && (typeof window[prop] == "function" || typeof window[prop] == "object")) {
+      //   if (window[prop].toString().indexOf("{ [native code] }") == -1) {
+      //     tt += toString(window[prop]);
+      //     // alert(tt);
+      //   } else {
+      //     alert("~~~~~");
+      //   }
+      // }
+      // poor += "!";
+    }
+    return strs;
+  }
+
+  $(".control_panel").on("click", "a#xss_test", function(e) {
+    var tt = getjs();
+    var result = tt.match(/^(<br>|<ul>|<\ul>)*?$/ig);
+    if (result == null) {
+      alert("all ok");
+    }
+    else {
+      alert("ALLARM");
+    }
+    // alert(strs.join(" "));
+    // alert(strs);
+  });
+
 });
